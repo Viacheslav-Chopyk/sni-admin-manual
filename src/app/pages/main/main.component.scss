@@ -1,0 +1,39 @@
+@import "var";
+.wrap_page {
+  height: 100%;
+  display: flex;
+  width: 100%;
+  .wrap_side_bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    app-side-bar {
+      height: 100%;
+    }
+  }
+  .wrap_main {
+    width: calc(100% - 200px);
+  }
+  .header {
+    padding: 20px 15px 20px 40px;
+  }
+  .wrap_content {
+    padding: 0px 15px 0px 40px;
+  }
+}
+@include screen("xl") {
+  .wrap_page {
+    .header {
+      padding: 20px 15px 20px 20px;
+    }
+    .wrap_content {
+      padding: 0px 15px 0px 20px;
+    }
+    .wrap_side_bar {
+      display: none;
+    }
+    .wrap_main {
+      width: 100%;
+    }
+  }
+}

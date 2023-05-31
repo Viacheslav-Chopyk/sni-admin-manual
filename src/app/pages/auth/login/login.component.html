@@ -1,0 +1,167 @@
+<div class="wrap_auth">
+  <div class="logo_auth_mob">
+    <img src="assets/images/new_logo.png" alt="">
+  </div>
+  <div class="left_auth">
+    <div class="logo_auth">
+      <img src="assets/images/new_logo.png" alt="">
+    </div>
+    <button class="stroked_button" (click)="toRegister()" >New account</button>
+  </div>
+  <!--  Login-->
+  <div *ngIf="isStep('login')" class="right_auth">
+    <div class="wrap_content_auth">
+      <div class="title_auth">Login</div>
+      <div class="descr_auth">Welcome to SNI</div>
+
+      <form [formGroup]="loginForm" (ngSubmit)="sendLogin()">
+        <mat-form-field class="example-full-width default_input" appearance="fill">
+          <mat-label>Email</mat-label>
+          <span matPrefix>
+              <img src="../assets/icons/inputs/email_icon.png" alt="">
+            </span>
+          <input type="text" matInput placeholder="" formControlName="email">
+        </mat-form-field>
+
+        <mat-form-field class="example-full-width default_input" appearance="fill">
+          <mat-label>Password</mat-label>
+          <span matPrefix>
+              <img src="../assets/icons/inputs/pass_icon.png" alt="">
+            </span>
+          <input type="password" matInput placeholder="" formControlName="password">
+        </mat-form-field>
+
+        <button class="forget_password" mat-button type="button" (click)="toReset()" >Forget password?</button>
+        <div class="login">
+          <button type="submit" class="default_button">Login</button>
+        </div>
+        <button class="stroked_button mob_button_forget" (click)="toRegister()" >New account</button>
+      </form>
+    </div>
+  </div>
+  <!--   Verify change sms-->
+  <div *ngIf="isStep('sms')" class="right_auth">
+    <div class="wrap_content_auth reset_password">
+      <div class="title_auth">LOGIN</div>
+      <div class="descr_auth">Verify your phone number</div>
+      <div class="base_icon_text">
+        <img src="assets/icons/login/smartphone.svg" alt="">
+        <div>Verify it by entering a 6-digit code that will be sent to *******433</div>
+      </div>
+      <div class="send_verify">
+        <button class="stroked_button" (click)="switch('selectMethod')">Change method</button>
+        <button class="default_button" (click)="selectMethodVerify('sms', 'verifySMS')">Send</button>
+      </div>
+    </div>
+  </div>
+  <!--   Verify change email-->
+  <div *ngIf="isStep('email')" class="right_auth">
+    <div class="wrap_content_auth reset_password">
+      <div class="title_auth">LOGIN</div>
+      <div class="descr_auth">Verify your email number</div>
+      <div class="base_icon_text">
+        <img src="assets/icons/email.svg" alt="">
+        <div>Verify it by entering a 6-digit code that will be sent to *******433</div>
+      </div>
+      <div class="send_verify">
+        <button class="stroked_button" (click)="switch('selectMethod')">Change method</button>
+        <button class="default_button" (click)="selectMethodVerify('email', 'verifyEMAIL')">Send</button>
+      </div>
+    </div>
+  </div>
+  <!--   Verify change select-->
+  <div *ngIf="isStep('selectMethod')" class="right_auth">
+    <div class="wrap_content_auth reset_password">
+      <div class="title_auth">LOGIN</div>
+      <div class="descr_auth">Verify your phone number</div>
+      <div class="inner-block">
+        <div (click)="switch('sms')" class="base_icon_text_icon">
+          <img src="assets/icons/login/smartphone.svg" alt="">
+          <div>Send it by SMS</div>
+          <img src="assets/icons/settings.svg" alt="">
+        </div>
+        <div (click)="switch('email')" class="base_icon_text_icon">
+          <img class="first_img" src="assets/icons/email.svg" alt="">
+          <div>Send it by email</div>
+          <img src="assets/icons/settings.svg" alt="">
+        </div>
+      </div>
+    </div>
+  </div>
+  <!--  Verify SMS-->
+  <div *ngIf="isStep('verifySMS')" class="right_auth">
+    <div class="wrap_content_auth">
+      <div class="title_auth">Login</div>
+      <div class="descr_auth">Verify your phone number</div>
+      <div class="description">To add this number as a recovery option please verify it by entering a 6-digit code that
+        was sent to your number
+      </div>
+
+      <div class="descr_auth">+972 0541234567 Change</div>
+
+      <div class="input_phone">
+        <app-custom-phone-input [value]="code" [numInput]="6"></app-custom-phone-input>
+        <div class="verify">
+          <button (click)="sendVerify('sms')" class="default_button">Verify</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!--  Verify EMAIL-->
+  <div *ngIf="isStep('verifyEMAIL')" class="right_auth">
+    <div class="wrap_content_auth">
+      <div class="title_auth">Login</div>
+      <div class="descr_auth">Verify your phone number</div>
+      <div class="description">To add this email as a recovery option please verify it by entering a 6-digit code that
+        was sent to your number
+      </div>
+
+      <div class="descr_auth">email Change</div>
+
+      <div class="input_phone">
+        <app-custom-phone-input [value]="code" [numInput]="6"></app-custom-phone-input>
+        <div class="verify">
+          <button (click)="sendVerify('email')" class="default_button">Verify</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!--  Reset password-->
+  <!--  <div *ngIf="settingsStepper[10].state" class="right_auth">-->
+  <!--    <div class="wrap_content_auth reset_password">-->
+  <!--      <div class="title_auth">Reset password</div>-->
+  <!--      <div class="descr_auth">Reset via email</div>-->
+  <!--      <div class="description">Mail with the link for reset password was sent to email ****name@gmail.com</div>-->
+  <!--    </div>-->
+  <!--  </div>-->
+
+
+  <!--   Reset password new password-->
+  <!--  <div *ngIf="false" class="right_auth">-->
+  <!--    <div class="wrap_content_auth reset_password">-->
+  <!--      <div class="title_auth">Reset password</div>-->
+  <!--      <div class="descr_auth">Create new password</div>-->
+  <!--      <form>-->
+  <!--        <mat-form-field class="example-full-width default_input" appearance="fill">-->
+  <!--          <mat-label>New Password</mat-label>-->
+  <!--          <span matPrefix>-->
+  <!--              <img src="../assets/icons/inputs/pass_icon.png" alt="">-->
+  <!--            </span>-->
+  <!--          <input type="tel" matInput placeholder="555-555-1234" [formControl]="emailFormControl">-->
+  <!--        </mat-form-field>-->
+  <!--        <mat-form-field class="example-full-width default_input" appearance="fill">-->
+  <!--          <mat-label>Repeat Password</mat-label>-->
+  <!--          <span matPrefix>-->
+  <!--             <img src="../assets/icons/inputs/pass_icon.png" alt="">-->
+  <!--            </span>-->
+  <!--          <input type="tel" matInput placeholder="555-555-1234" [formControl]="emailFormControl">-->
+  <!--        </mat-form-field>-->
+  <!--        <div class="login">-->
+  <!--          <button class="default_button">Login</button>-->
+  <!--        </div>-->
+  <!--      </form>-->
+  <!--    </div>-->
+  <!--  </div>-->
+</div>
