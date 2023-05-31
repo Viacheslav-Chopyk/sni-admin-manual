@@ -5,7 +5,6 @@ import { IGroup, IComment } from 'src/app/shared/types/shared.types';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { SpinnerVisibilityService } from 'ng-http-loader';
 import { LoginService } from "../../pages/auth/login/login.service";
 import { UserServiceService } from "./user-service.service";
 
@@ -58,49 +57,49 @@ export class SharedServiceService {
     return this.http.post(environment.urlNewBack + '/UpdateBiz', dataReq);
   }
 
-  updateDataKeywords() {
-    const currentBusinesId = this.userServ.currentBusinessId$.getValue();
-    const userInfo = this.userServ.user$.getValue();
-    const indexBusines = userInfo.business.findIndex((item: any) => item.id === currentBusinesId);
-    this.loginService.getKeywordsData(currentBusinesId).subscribe((res: any) => {
-      const busines = {
-        ...userInfo.business[indexBusines],
-        category: [],
-        interesting: {
-          facebookGroups: []
-        },
-        general: {
-          keywords: []
-        },
-        brands: []
-      }
-      res.data.forEach((el: any) => {
-        if (el.CategoryID != 'brands') {
-          if (el.CategoryID === 'category') {
-            busines[el.CategoryID].push(el)
-          }
-          if (el.CategoryID === 'interesting') {
-            busines[el.CategoryID].facebookGroups.push(el)
-          }
-          if (el.CategoryID === 'general') {
-            busines[el.CategoryID].keywords.push(el)
-          }
-        } else {
-          const index = busines.brands.findIndex((element: any) => element.name === el.name);
-          if (index != -1) {
-            busines.brands[index].keywords.push(el);
-          } else {
-            busines.brands.push({
-              name: el.name,
-              keywords: [
-                el
-              ]
-            })
-          }
-        }
-      })
-      userInfo.business[indexBusines] = busines;
-      this.userServ.setUser(userInfo);
-    })
-  }
+  // updateDataKeywords() {
+  //   const currentBusinesId = this.userServ.currentBusinessId$.getValue();
+  //   const userInfo = this.userServ.user$.getValue();
+  //   const indexBusines = userInfo.business.findIndex((item: any) => item.id === currentBusinesId);
+  //   this.loginService.getKeywordsData(currentBusinesId).subscribe((res: any) => {
+  //     const busines = {
+  //       ...userInfo.business[indexBusines],
+  //       category: [],
+  //       interesting: {
+  //         facebookGroups: []
+  //       },
+  //       general: {
+  //         keywords: []
+  //       },
+  //       brands: []
+  //     }
+  //     res.data.forEach((el: any) => {
+  //       if (el.CategoryID != 'brands') {
+  //         if (el.CategoryID === 'category') {
+  //           busines[el.CategoryID].push(el)
+  //         }
+  //         if (el.CategoryID === 'interesting') {
+  //           busines[el.CategoryID].facebookGroups.push(el)
+  //         }
+  //         if (el.CategoryID === 'general') {
+  //           busines[el.CategoryID].keywords.push(el)
+  //         }
+  //       } else {
+  //         const index = busines.brands.findIndex((element: any) => element.name === el.name);
+  //         if (index != -1) {
+  //           busines.brands[index].keywords.push(el);
+  //         } else {
+  //           busines.brands.push({
+  //             name: el.name,
+  //             keywords: [
+  //               el
+  //             ]
+  //           })
+  //         }
+  //       }
+  //     })
+  //     userInfo.business[indexBusines] = busines;
+  //     this.userServ.setUser(userInfo);
+  //   })
+  // }
 }

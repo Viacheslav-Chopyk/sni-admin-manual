@@ -5,11 +5,8 @@ import { AuthComponent } from './auth.component';
 import { HttpClientModule } from '@angular/common/http';
 const routes: Routes = [{
   path: '', component: AuthComponent, children: [
-    {path: 'login', loadChildren: () => import('./login/login.module').then(m => m.LoginModule)},
-    {path: 'reset', loadChildren: () => import('./resetpass/resetpass.module').then(m => m.ResetpassModule)},
-    {path: 'registration', loadChildren: () => import('./register/register.module').then(m => m.RegisterModule)},
-    {path: 'newbusiness', loadChildren: () => import('./new-business/new-business.module').then(m => m.NewBusinessModule)},
-    {path: '', redirectTo: '/login', pathMatch: 'full'},
+    {path: '', loadChildren: () => import('../main/dashboard/dashboard.module').then(m => m.DashboardModule)},
+    {path: '', redirectTo: '/', pathMatch: 'full'},
   ]
 }];
 

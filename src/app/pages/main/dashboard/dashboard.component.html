@@ -1,112 +1,34 @@
-<div class="wrap_icon_filter">
-  <img src="../assets/icons/filter_icon.png" alt="" (click)="openFilter()" >
-</div>
-<div class="wrap_icon_settings">
-  <img src="../assets/icons/stat_icon.png" alt="" (click)="openPie()" >
-  <a [routerLink]="['/main/settings']">
-    <img src="../assets/icons/settings_black_icon.png" alt=""></a>
-</div>
-<div class="wrap_dashboard">
-  <div class="wrap">
-    <div class="top_info">
-      <div class="item_info info_key">
-        <div class="wrap_text_info">
-          <div class="count_info">
-            {{keywordLimit.current}}
-          </div>
-          <!-- <div class="count_info">
-            {{keywordLimit.current}}/{{keywordLimit.limit}}
-          </div> -->
-          <div class="text_info">
-            <span>Keywords</span>
-            <!-- <span>Suggest <b>5</b></span>
-            <span></span><span></span> -->
-          </div>
+<div class="form" xmlns="http://www.w3.org/1999/html">
+    <div class="data-base-form">
+      <mat-form-field appearance="fill">
+        <mat-label>Data Table Name</mat-label>
+        <mat-select [(ngModel)]="selectedValue" name="table" (selectionChange)="changeTableData($event.value)">
+          <mat-option *ngFor="let item of Object.keys(tableData)" [value]="item">
+            {{item}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <p class="selected-table"> Selected data table: {{selectedValue}}</p>
+      <form  class="data-form" [formGroup]="myForm" *ngIf="selectedValue">
+        <div class="data-item" *ngFor="let item of dataValue">
+          <mat-label>{{item.name}}: </mat-label>
+          <input class="inputData" [formControlName]="item.name"  matInput [type]="item.type === 'bigint' || item.type === 'int' ? 'number' : 'text'"  maxlength="256" placeholder="" [ngClass]="{'required-input': isInputRequired(item)}">
         </div>
-      </div>
-      <div class="item_info info_groups" *ngIf="amount">
-        <div class="wrap_text_info">
-          <div class="count_info" >
-            {{amount.Groups}}
-          </div>
-          <div class="text_info">
-            <span>Groups</span>
-          </div>
-        </div>
-      </div>
-      <div class="item_info info_profiles" *ngIf="amount">
-        <div class="wrap_text_info">
-          <div class="count_info">
-            {{amount.Users}}
-          </div>
-          <div class="text_info">
-            <span>Profiles</span>
-          </div>
-        </div>
-      </div>
-      <div class="item_info info_post" *ngIf="amount">
-        <div class="wrap_text_info">
-          <div class="count_info">
-            {{amount.Posts + amount.Comments}}
-          </div>
-          <div class="text_info">
-            <span>Posts & Comments</span>
-          </div>
-        </div>
-      </div>
+      </form>
     </div>
-    <div class="body">
-      <div class="wrap_chart">
-        <canvas baseChart *ngIf="datasets.length"  [datasets]="datasets" [options]="options" [plugins]="plugins" [type]="'scatter'" style="height: 100%; width: 100%;">
-        </canvas>
-      </div>
+    <div class="socialFrom">
+      <mat-form-field appearance="fill">
+        <mat-label>Type of Network</mat-label>
+        <select matNativeControl [(ngModel)]="selectedNetwork" name="network">
+          <option value="" selected></option>
+          <option *ngFor="let item of socialNetwork" [value]="item.value">
+            {{item.name}}
+          </option>
+        </select>
+      </mat-form-field>
+      <p class="selected-network"> Selected Network: {{selectedNetwork}} </p>
+    </div>
+    <button type="submit" (click)="submitForm()" [disabled]="!selectedNetwork || myForm.invalid || !selectedValue">Submit</button>
 
-      <!-- <div class="social">
-        <div class="" *ngFor="let network of isNetwork; let i = index;">
-          <img [ngClass]="{active: network.active || network.is_not_empty}" (click)="changeNetwork(i)" [src]="'assets/icons/social/' + network.img + (network.active ? '_active' : network.is_not_empty ? '_color' : '') + '.svg'" alt="">
-        </div>
-      </div>
-      <div class="wrap_social" *ngIf="showData" infiniteScroll #scrollBlockHtml
-      [infiniteScrollDistance]="2"
-      [infiniteScrollThrottle]="50"
-      (scrolled)="scrollBlock()" [scrollWindow]="false" >
-        <div class="no_data" *ngIf="!currentSocials.length">
-          There is no data...
-        </div>
-        <div class="item_social" *ngFor="let item of currentSocials; let last = last; let i = index;">
-          <div class="icon_social" [ngClass]="{'opacityLast': last}">
-            <img src="https://picsum.photos/15" alt="">
-          </div>
-          <div class="body_social" [ngClass]="{'opacityLast': last}">
-            <div class="title_social">
-              {{item.title}}
-            </div>
-            <div class="link_social" *ngIf="!last" >
-              <a href="{{item.link}}" target="_blank">{{item.social}}</a>
-            </div>
-            <div class="text_social" *ngIf="!last" [ngClass]="{'opacityPrev': i == 1}">
-              {{item.post}}
-            </div>
-          </div>
-          <div class="img_social" *ngIf="item.img && !last">
-            <img [src]="item.img" alt="">
-          </div>
-        </div>
-      </div> -->
-    </div>
-  </div>
-  <div class="filter">
-    <div class="filter_icon_wrap">
-      <div class="butt_openFilter" (click)="showFilter = !showFilter" [ngStyle]="{'left': showFilter ? 0 : 'auto'}">
-        <img src="../assets/icons/filter_icon.png" alt="" >
-      </div>
-      <app-main-filter [hidden]="!showFilter"></app-main-filter>
-    </div>
-    <div class="wrap_filter_chart" *ngIf="pieChart">
-      <app-chart-filter [title]="'Brand mentions'" [data]="pieChart.category"></app-chart-filter>
-      <app-chart-filter [data]="pieChart.interesting" [title]="'Products & services'"></app-chart-filter>
-      <app-chart-filter [data]="pieChart.brands" [title]="'Competitions'"></app-chart-filter>
-      <app-chart-filter [data]="pieChart.general" [title]="'General monitoring'"></app-chart-filter>
-    </div>
-  </div>
+    <button (click)="downloadFile()">Download File</button>
 </div>

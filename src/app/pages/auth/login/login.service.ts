@@ -38,14 +38,6 @@ export class LoginService {
     return this.http.get(environment.urlNewBack + '/authUrl?username=BarandSlavik&password=SheliFron');
   }
 
-  chengeVerify(method: any) {
-    return this.apiServ.get('auth/login/sendCode?type=' + method);
-  }
-
-  sendCodeVerify(method: string, data: any) {
-    return this.apiServ.post('auth/login/verifyCode?type=' + method, data);
-  }
-
   getKeywordsData(businesid: number){
     const token2 = this.helpServ.getLocalItem('token2');
     return this.http.get(environment.urlNewBack + `/ALLKEYWORDS?Token=${token2}&BusinessID=${businesid}`)

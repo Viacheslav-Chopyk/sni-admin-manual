@@ -6,10 +6,8 @@
     <div class="logo_auth">
       <img src="assets/images/new_logo.png" alt="">
     </div>
-    <button class="stroked_button" (click)="toRegister()" >New account</button>
   </div>
   <!--  Login-->
-  <div *ngIf="isStep('login')" class="right_auth">
     <div class="wrap_content_auth">
       <div class="title_auth">Login</div>
       <div class="descr_auth">Welcome to SNI</div>
@@ -40,93 +38,15 @@
     </div>
   </div>
   <!--   Verify change sms-->
-  <div *ngIf="isStep('sms')" class="right_auth">
-    <div class="wrap_content_auth reset_password">
-      <div class="title_auth">LOGIN</div>
-      <div class="descr_auth">Verify your phone number</div>
-      <div class="base_icon_text">
-        <img src="assets/icons/login/smartphone.svg" alt="">
-        <div>Verify it by entering a 6-digit code that will be sent to *******433</div>
-      </div>
-      <div class="send_verify">
-        <button class="stroked_button" (click)="switch('selectMethod')">Change method</button>
-        <button class="default_button" (click)="selectMethodVerify('sms', 'verifySMS')">Send</button>
-      </div>
-    </div>
-  </div>
   <!--   Verify change email-->
-  <div *ngIf="isStep('email')" class="right_auth">
-    <div class="wrap_content_auth reset_password">
-      <div class="title_auth">LOGIN</div>
-      <div class="descr_auth">Verify your email number</div>
-      <div class="base_icon_text">
-        <img src="assets/icons/email.svg" alt="">
-        <div>Verify it by entering a 6-digit code that will be sent to *******433</div>
-      </div>
-      <div class="send_verify">
-        <button class="stroked_button" (click)="switch('selectMethod')">Change method</button>
-        <button class="default_button" (click)="selectMethodVerify('email', 'verifyEMAIL')">Send</button>
-      </div>
-    </div>
-  </div>
+
   <!--   Verify change select-->
-  <div *ngIf="isStep('selectMethod')" class="right_auth">
-    <div class="wrap_content_auth reset_password">
-      <div class="title_auth">LOGIN</div>
-      <div class="descr_auth">Verify your phone number</div>
-      <div class="inner-block">
-        <div (click)="switch('sms')" class="base_icon_text_icon">
-          <img src="assets/icons/login/smartphone.svg" alt="">
-          <div>Send it by SMS</div>
-          <img src="assets/icons/settings.svg" alt="">
-        </div>
-        <div (click)="switch('email')" class="base_icon_text_icon">
-          <img class="first_img" src="assets/icons/email.svg" alt="">
-          <div>Send it by email</div>
-          <img src="assets/icons/settings.svg" alt="">
-        </div>
-      </div>
-    </div>
-  </div>
+
   <!--  Verify SMS-->
-  <div *ngIf="isStep('verifySMS')" class="right_auth">
-    <div class="wrap_content_auth">
-      <div class="title_auth">Login</div>
-      <div class="descr_auth">Verify your phone number</div>
-      <div class="description">To add this number as a recovery option please verify it by entering a 6-digit code that
-        was sent to your number
-      </div>
 
-      <div class="descr_auth">+972 0541234567 Change</div>
-
-      <div class="input_phone">
-        <app-custom-phone-input [value]="code" [numInput]="6"></app-custom-phone-input>
-        <div class="verify">
-          <button (click)="sendVerify('sms')" class="default_button">Verify</button>
-        </div>
-      </div>
-    </div>
-  </div>
 
   <!--  Verify EMAIL-->
-  <div *ngIf="isStep('verifyEMAIL')" class="right_auth">
-    <div class="wrap_content_auth">
-      <div class="title_auth">Login</div>
-      <div class="descr_auth">Verify your phone number</div>
-      <div class="description">To add this email as a recovery option please verify it by entering a 6-digit code that
-        was sent to your number
-      </div>
 
-      <div class="descr_auth">email Change</div>
-
-      <div class="input_phone">
-        <app-custom-phone-input [value]="code" [numInput]="6"></app-custom-phone-input>
-        <div class="verify">
-          <button (click)="sendVerify('email')" class="default_button">Verify</button>
-        </div>
-      </div>
-    </div>
-  </div>
 
   <!--  Reset password-->
   <!--  <div *ngIf="settingsStepper[10].state" class="right_auth">-->
@@ -164,4 +84,4 @@
   <!--      </form>-->
   <!--    </div>-->
   <!--  </div>-->
-</div>
+
