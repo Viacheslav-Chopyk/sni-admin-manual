@@ -1,8 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {DashboardService} from "./dashboard.service";
 import {IDataValue, ISocialNetwork} from "./types/dashboard.types";
-import {HttpClient, HttpHeaders} from "@angular/common/http";
-import {FormBuilder, FormControl, Validators } from '@angular/forms';
+import {HttpClient, HttpHeaders, HttpResponse} from "@angular/common/http";
+import {FormBuilder, FormControl, Validators} from '@angular/forms';
 
 
 @Component({
@@ -16,7 +16,7 @@ export class DashboardComponent implements OnInit {
   dataValue:IDataValue[] = [];
   selectedValue: string = '';
   selectedNetwork: string = '';
-  typeValue: string = '';
+  selectedFile: File | null = null;
 
   socialNetwork: ISocialNetwork[] = [
     {value: 'Twitter', name: 'Twitter'},
@@ -34,9 +34,7 @@ export class DashboardComponent implements OnInit {
     private dashboardService: DashboardService,
     private http: HttpClient,
     private fb: FormBuilder
-  ) {
-
-  }
+  ) {}
 
   ngOnInit() {
     this.getData();
@@ -75,22 +73,23 @@ export class DashboardComponent implements OnInit {
       }
     };
 
-    this.dataValue.forEach(el=>{
+    this.dataValue.forEach(el=> {
       if(el.type === 'int' || el.type === 'bigint') {
         tableData[this.selectedValue][el.name] = Number(tableData[this.selectedValue][el.name])
       }
     })
 
-    this.dashboardService.sendTableData(tableData).subscribe(() => {
-      this.selectedValue = '';
-      this.selectedNetwork = '';
+    this.dashboardService.sendTableData(tableData).subscribe((resp) => {
+      if(resp) {
+        alert('Data send successfully')
+        this.selectedValue = '';
+        this.selectedNetwork = '';
+      }
     })
   }
 
-  downloadFile() {
-    const fileUrl = 'https://example.com/file-url'; // Replace with your file URL
+  downloadFile(fileUrl: string) {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-
     this.http.get(fileUrl, {
       responseType: 'blob',
       headers: headers
@@ -99,10 +98,35 @@ export class DashboardComponent implements OnInit {
       const url = window.URL.createObjectURL(blob);
       const link = document.createElement('a');
       link.href = url;
-      link.download = 'file-name.ext'; // Replace with your desired file name
+      link.download = this.getFileName(fileUrl);
       link.click();
       window.URL.revokeObjectURL(url);
     });
+  }
+
+  getFileName(fileUrl:string):string {
+    const lastSlashIndex = fileUrl.lastIndexOf('/');
+    return fileUrl.substring(lastSlashIndex + 1);
+  }
+
+  onFileSelected(event: any) {
+    this.selectedFile = event.target.files[0];
+  }
+
+  uploadFile() {
+    if (this.selectedFile) {
+      const formData = new FormData();
+      formData.append('upload_file', this.selectedFile, this.selectedFile.name);
+      this.http.post('https://midapi.sni.ai/sending_files_repair', formData, { observe: 'response', responseType: 'text' })
+        .subscribe((res: HttpResponse<any>) => {
+        if (res.status === 200) {
+          alert('File uploaded successfully');
+          this.selectedFile = null;
+          const fileInput = document.getElementById('fileInput') as HTMLInputElement;
+          fileInput.value = '';
+        }
+      });
+    }
   }
 
   protected readonly Object = Object;

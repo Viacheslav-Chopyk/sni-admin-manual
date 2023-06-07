@@ -16,6 +16,30 @@
   margin-bottom: 20px;
   }
 }
+
 .required-input {
   border: 2px solid red;
+}
+
+.form {
+  margin-top: 40px;
+}
+
+::ng-deep .mat-mdc-tab-body-wrapper, .mat-mdc-tab-group {
+  height: 100%;
+}
+
+::ng-deep .mat-mdc-tab-header {
+  margin-bottom: 40px;
+}
+
+.template-block {
+  margin-bottom: 40px;
+
+  button {
+    margin-left: 20px;
+  }
+}
+.upload-block {
+  margin-left: 20px;
 }

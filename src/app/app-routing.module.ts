@@ -4,7 +4,7 @@ import { RouterModule, Routes } from '@angular/router';
 const routes: Routes = [
   // {path: 'login', loadChildren: () => import ('./pages/auth/auth.module').then(m=>m.AuthModule),
   // },
-  { path: 'sni-admin-manual', loadChildren: () => import('./pages/main/main.module').then( m => m.MainModule)}
+  { path: '', loadChildren: () => import('./pages/main/main.module').then( m => m.MainModule)}
 ];
 
 @NgModule({
@@ -12,3 +12,4 @@ const routes: Routes = [
   exports: [RouterModule]
 })
 export class AppRoutingModule { }
+

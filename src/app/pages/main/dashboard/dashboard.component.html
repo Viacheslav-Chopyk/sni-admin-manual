@@ -1,34 +1,63 @@
-<div class="form" xmlns="http://www.w3.org/1999/html">
-    <div class="data-base-form">
-      <mat-form-field appearance="fill">
-        <mat-label>Data Table Name</mat-label>
-        <mat-select [(ngModel)]="selectedValue" name="table" (selectionChange)="changeTableData($event.value)">
-          <mat-option *ngFor="let item of Object.keys(tableData)" [value]="item">
-            {{item}}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
-      <p class="selected-table"> Selected data table: {{selectedValue}}</p>
-      <form  class="data-form" [formGroup]="myForm" *ngIf="selectedValue">
-        <div class="data-item" *ngFor="let item of dataValue">
-          <mat-label>{{item.name}}: </mat-label>
-          <input class="inputData" [formControlName]="item.name"  matInput [type]="item.type === 'bigint' || item.type === 'int' ? 'number' : 'text'"  maxlength="256" placeholder="" [ngClass]="{'required-input': isInputRequired(item)}">
-        </div>
-      </form>
+<mat-tab-group>
+  <mat-tab label="Edit data base">
+    <div class="form" xmlns="http://www.w3.org/1999/html">
+      <div class="data-base-form">
+        <mat-form-field appearance="fill">
+          <mat-label>Data Table Name</mat-label>
+          <mat-select [(ngModel)]="selectedValue" name="table" (selectionChange)="changeTableData($event.value)">
+            <mat-option *ngFor="let item of Object.keys(tableData)" [value]="item">
+              {{item}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <p class="selected-table"> Selected data table: {{selectedValue}}</p>
+        <form class="data-form" [formGroup]="myForm" *ngIf="selectedValue">
+          <div class="data-item" *ngFor="let item of dataValue">
+            <mat-label>{{item.name}}: </mat-label>
+            <input class="inputData"
+                   [formControlName]="item.name" matInput
+                   [type]="item.type === 'bigint' || item.type === 'int' ? 'number' : 'text'" maxlength="256"
+                   placeholder="" [ngClass]="{'required-input': isInputRequired(item)}">
+          </div>
+        </form>
+      </div>
+      <div class="socialFrom">
+        <mat-form-field appearance="fill">
+          <mat-label>Type of Network</mat-label>
+          <select matNativeControl [(ngModel)]="selectedNetwork" name="network">
+            <option value="" selected></option>
+            <option *ngFor="let item of socialNetwork" [value]="item.value">
+              {{item.name}}
+            </option>
+          </select>
+        </mat-form-field>
+        <p class="selected-network"> Selected Network: {{selectedNetwork}} </p>
+      </div>
+      <button mat-raised-button color="primary" type="submit" (click)="submitForm()"
+              [disabled]="!selectedNetwork || myForm.invalid || !selectedValue">
+        Submit
+      </button>
     </div>
-    <div class="socialFrom">
-      <mat-form-field appearance="fill">
-        <mat-label>Type of Network</mat-label>
-        <select matNativeControl [(ngModel)]="selectedNetwork" name="network">
-          <option value="" selected></option>
-          <option *ngFor="let item of socialNetwork" [value]="item.value">
-            {{item.name}}
-          </option>
-        </select>
-      </mat-form-field>
-      <p class="selected-network"> Selected Network: {{selectedNetwork}} </p>
+  </mat-tab>
+  <mat-tab label="Download or Upload file">
+    <div class="template-block">
+      <button mat-raised-button color="primary"
+              (click)="downloadFile('https://midapi.sni.ai/get_files/TABLECOMMENT.xlsx')">Download TABLE COMMENT
+      </button>
+      <button mat-raised-button color="primary"
+              (click)="downloadFile('https://midapi.sni.ai/get_files/TABLEGROUPS.xlsx')">Download TABLE POST
+      </button>
+      <button mat-raised-button color="primary"
+              (click)="downloadFile('https://midapi.sni.ai/get_files/TABLEPOSTS.xlsx')">Download TABLE POSTS
+      </button>
+      <button mat-raised-button color="primary"
+              (click)="downloadFile('https://midapi.sni.ai/get_files/TABLEUSER.xlsx')">Download TABLE USER
+      </button>
     </div>
-    <button type="submit" (click)="submitForm()" [disabled]="!selectedNetwork || myForm.invalid || !selectedValue">Submit</button>
-
-    <button (click)="downloadFile()">Download File</button>
-</div>
+    <div class="upload-block">
+      <input type="file" id="fileInput" (change)="onFileSelected($event)"
+             accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"/>
+      <button mat-raised-button color="primary" (click)="uploadFile()" [disabled]="!selectedFile">Upload</button>
+    </div>
+  </mat-tab>
+</mat-tab-group>
