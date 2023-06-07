@@ -12,7 +12,7 @@ export class AuthGuard implements CanActivate {
   canActivate(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-    if (!localStorage.getItem('token')) {
+    if (!localStorage.getItem('tokenSniApiToken')) {
       this.router.navigateByUrl('login');
       return false;
     }
