@@ -13,21 +13,21 @@
         <p class="selected-table"> Selected type Network: {{selectedNetwork}}</p>
         <div *ngIf="selectedNetwork">
           <div *ngFor="let item of Object.keys(dataValue)">
-            <p>{{item}}</p>
+            <p>{{item}}:</p>
             <form class="data-form"  [formGroup]="myForm[item]">
               <div class="data-item"*ngFor="let input of dataValue[item]">
-                <mat-label>{{input.name}}: </mat-label>
+                <mat-label>{{input.name}}<span style="color: red; font-size: 20px" *ngIf="isInputRequired(input)"> * </span>: </mat-label>
                 <input class="inputData" 
                       [formControlName]="input.name" matInput
                       [type]="input.type === 'bigint' || input.type === 'int' ? 'number' : 'text'" maxlength="256"
-                      placeholder="" [ngClass]="{'required-input': isInputRequired(input)}">
+                      placeholder="">
               </div>
             </form>
           </div>
         </div>
       </div>
       <button mat-raised-button color="primary" type="submit" (click)="submitForm()"
-              [disabled]="!selectedNetwork || myForm.invalid">
+              [disabled]="!selectedNetwork || formValidation()">
         Submit
       </button>
     </div>
