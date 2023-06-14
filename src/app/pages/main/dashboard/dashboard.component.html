@@ -4,41 +4,32 @@
       <div class="data-base-form">
         <mat-form-field appearance="fill">
           <mat-label>Type network:</mat-label>
-          <mat-select [(ngModel)]="selectedValue" name="table" (selectionChange)="changeTableData($event.value)">
+          <mat-select [(ngModel)]="selectedNetwork" name="table" (selectionChange)="changeTableData($event.value)">
             <mat-option *ngFor="let item of Object.keys(tableData)" [value]="item">
               {{item}}
             </mat-option>
           </mat-select>
         </mat-form-field>
-        <p class="selected-table"> Selected type Network: {{selectedValue}}</p>
-        <div *ngIf="selectedValue && showForm">
-        <form class="data-form" *ngFor="let item of Object.keys(dataValue)" [formGroup]="myForm">
-          <div class="data-item"*ngFor="let input of dataValue[item]">
-            <mat-label>{{input.name}}: </mat-label>
-            <input class="inputData" 
-                   [formControlName]="input.name" matInput
-                   [type]="input.type === 'bigint' || input.type === 'int' ? 'number' : 'text'" maxlength="256"
-                   placeholder="" [ngClass]="{'required-input': isInputRequired(input)}">
+        <p class="selected-table"> Selected type Network: {{selectedNetwork}}</p>
+        <div *ngIf="selectedNetwork">
+          <div *ngFor="let item of Object.keys(dataValue)">
+            <p>{{item}}</p>
+            <form class="data-form"  [formGroup]="myForm[item]">
+              <div class="data-item"*ngFor="let input of dataValue[item]">
+                <mat-label>{{input.name}}: </mat-label>
+                <input class="inputData" 
+                      [formControlName]="input.name" matInput
+                      [type]="input.type === 'bigint' || input.type === 'int' ? 'number' : 'text'" maxlength="256"
+                      placeholder="" [ngClass]="{'required-input': isInputRequired(input)}">
+              </div>
+            </form>
           </div>
-        </form>
         </div>
       </div>
-      <div class="socialFrom">
-        <mat-form-field appearance="fill">
-          <mat-label>Type of Network</mat-label>
-          <select matNativeControl [(ngModel)]="selectedNetwork" name="network">
-            <option value="" selected></option>
-            <option *ngFor="let item of socialNetwork" [value]="item.value">
-              {{item.name}}
-            </option>
-          </select>
-        </mat-form-field>
-        <p class="selected-network"> Selected Network: {{selectedNetwork}} </p>
-      </div>
-      <!-- <button mat-raised-button color="primary" type="submit" (click)="submitForm()"
-              [disabled]="!selectedNetwork || myForm.invalid || !selectedValue">
+      <button mat-raised-button color="primary" type="submit" (click)="submitForm()"
+              [disabled]="!selectedNetwork || myForm.invalid">
         Submit
-      </button> -->
+      </button>
     </div>
   </mat-tab>
   <mat-tab label="Download or Upload file">
