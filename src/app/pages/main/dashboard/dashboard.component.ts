@@ -11,10 +11,11 @@ import { FormBuilder, FormControl, Validators } from '@angular/forms';
 })
 export class DashboardComponent implements OnInit {
   tableData: any = [];
-  dataValue: IDataValue[] = [];
+  dataValue: any;
   selectedValue: string = '';
   selectedNetwork: string = '';
   selectedFile: File | null = null;
+  showForm = false;
 
   socialNetwork: ISocialNetwork[] = [
     { value: 'Twitter', name: 'Twitter' },
@@ -26,7 +27,13 @@ export class DashboardComponent implements OnInit {
     { value: 'Google Search', name: 'Google Search' },
   ];
 
-  myForm = this.fb.group({});
+  myForm : any = {
+    TABLEPOSTS: this.fb.group({}),
+    TABLECOMMENT: this.fb.group({}),
+    TABLEGROUPS: this.fb.group({}),
+    TABLEUSER: this.fb.group({}),
+
+  };
 
   constructor(
     private dashboardService: DashboardService,
@@ -40,6 +47,7 @@ export class DashboardComponent implements OnInit {
 
   changeTableData(event: string) {
     this.dataValue = this.tableData[event];
+    
     this.createForm();
   }
 
@@ -50,11 +58,34 @@ export class DashboardComponent implements OnInit {
   }
 
   createForm() {
-    this.myForm = this.fb.group({});
-    this.dataValue.forEach((el) => {
-      const validators = el.required ? [Validators.required] : [];
-      this.myForm.addControl(el.name, new FormControl(el.value, validators));
-    });
+    this.showForm = false;
+    this.myForm = {
+      TABLEPOSTS: this.fb.group({}),
+      TABLECOMMENT: this.fb.group({}),
+      TABLEGROUPS: this.fb.group({}),
+      TABLEUSER: this.fb.group({}),
+  
+    };
+    Object.keys(this.dataValue).forEach(el=>{
+      this.dataValue[el].forEach((item:any)=>{
+        const validators = item.required ? [Validators.required] : [];
+        
+        this.myForm[el].addControl(item.name, new FormControl(item.value, validators));
+      })
+      
+    })
+    setTimeout(()=> {
+      this.showForm = true;
+    }, 500)
+    // this.myForm = this.fb.group({});
+    // this.dataValue.forEach((el:any)=>{
+    //   console.log(el);
+      
+    // })
+    // this.dataValue.forEach((el) => {
+    //   const validators = el.required ? [Validators.required] : [];
+    //   this.myForm.addControl(el.name, new FormControl(el.value, validators));
+    // });
   }
 
   isInputRequired(item: any): boolean {
@@ -62,30 +93,30 @@ export class DashboardComponent implements OnInit {
   }
 
   submitForm() {
-    const tableData: Record<string, any> = {
-      [this.selectedValue]: {
-        ...this.myForm.value,
-        network: this.selectedNetwork,
-        //const data sent with every table
-        StatusData: 21,
-      },
-    };
+    // const tableData: Record<string, any> = {
+    //   [this.selectedValue]: {
+    //     ...this.myForm.value,
+    //     network: this.selectedNetwork,
+    //     //const data sent with every table
+    //     StatusData: 21,
+    //   },
+    // };
 
-    this.dataValue.forEach((el) => {
-      if (el.type === 'int' || el.type === 'bigint') {
-        tableData[this.selectedValue][el.name] = Number(
-          tableData[this.selectedValue][el.name]
-        );
-      }
-    });
+    // this.dataValue.forEach((el:any) => {
+    //   if (el.type === 'int' || el.type === 'bigint') {
+    //     tableData[this.selectedValue][el.name] = Number(
+    //       tableData[this.selectedValue][el.name]
+    //     );
+    //   }
+    // });
 
-    this.dashboardService.sendTableData(tableData).subscribe((resp) => {
-      if (resp) {
-        alert('Data send successfully');
-        this.selectedValue = '';
-        this.selectedNetwork = '';
-      }
-    });
+    // this.dashboardService.sendTableData(tableData).subscribe((resp) => {
+    //   if (resp) {
+    //     alert('Data send successfully');
+    //     this.selectedValue = '';
+    //     this.selectedNetwork = '';
+    //   }
+    // });
   }
 
   downloadFile(fileUrl: string) {
