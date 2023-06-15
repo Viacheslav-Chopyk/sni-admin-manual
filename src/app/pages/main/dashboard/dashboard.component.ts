@@ -51,7 +51,6 @@ export class DashboardComponent implements OnInit {
 
   createForm() {
     this.myForm = {};
-
     Object.keys(this.dataValue).forEach((el) => {
       this.myForm[el] = this.fb.group({});
       this.dataValue[el].forEach((item: any) => {
@@ -74,8 +73,6 @@ export class DashboardComponent implements OnInit {
         ],
     };
     Object.keys(this.myForm).forEach(el=>{
-      console.log(el);
-      
       tableData['data'].push( {[el]:{
         ...this.transformData(this.myForm[el].value, el),
         network: this.selectedNetwork,

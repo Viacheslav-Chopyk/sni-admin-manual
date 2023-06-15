@@ -16,7 +16,7 @@
             <p>{{item}}:</p>
             <form class="data-form"  [formGroup]="myForm[item]">
               <div class="data-item"*ngFor="let input of dataValue[item]">
-                <mat-label>{{input.name}}<span style="color: red; font-size: 20px" *ngIf="isInputRequired(input)"> * </span>: </mat-label>
+                <mat-label>{{input.name}}<span style="color: red; font-size: 20px" *ngIf="isInputRequired(input)">* </span>: </mat-label>
                 <input class="inputData" 
                       [formControlName]="input.name" matInput
                       [type]="input.type === 'bigint' || input.type === 'int' ? 'number' : 'text'" maxlength="256"
