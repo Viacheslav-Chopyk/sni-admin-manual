@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { DashboardService } from './dashboard.service';
-import { IDataValue, ISocialNetwork } from './types/dashboard.types';
 import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, Validators } from '@angular/forms';
+import * as XLSX from 'xlsx';
 
 @Component({
   selector: 'app-dashboard',
@@ -14,16 +14,11 @@ export class DashboardComponent implements OnInit {
   dataValue: any;
   selectedNetwork: string = '';
   selectedFile: File | null = null;
-
-  socialNetwork: ISocialNetwork[] = [
-    { value: 'Twitter', name: 'Twitter' },
-    { value: 'Facebook', name: 'Facebook' },
-    { value: 'Instagram', name: 'Instagram' },
-    { value: 'Youtube', name: 'YouTube' },
-    { value: 'TikTok', name: 'TikTok' },
-    { value: 'Reddit', name: 'Reddit' },
-    { value: 'Google Search', name: 'Google Search' },
-  ];
+  isFileValid = true;
+  onFileSelected(event: any) {
+    this.selectedFile = event.target.files[0];
+    this.checkCellValues();
+  }
 
   myForm: any = {};
 
@@ -39,7 +34,6 @@ export class DashboardComponent implements OnInit {
 
   changeTableData(event: string) {
     this.dataValue = this.tableData[event];
-
     this.createForm();
   }
 
@@ -48,6 +42,7 @@ export class DashboardComponent implements OnInit {
       this.tableData = res;
     });
   }
+
 
   createForm() {
     this.myForm = {};
@@ -127,9 +122,104 @@ export class DashboardComponent implements OnInit {
     return fileUrl.substring(lastSlashIndex + 1);
   }
 
-  onFileSelected(event: any) {
-    this.selectedFile = event.target.files[0];
+
+  checkCellValues() {
+    if (this.selectedFile) {
+      const fileReader = new FileReader();
+      fileReader.onload = (e: any) => {
+        const data = new Uint8Array(e.target.result);
+        const workbook = XLSX.read(data, { type: 'array' });
+        const firstSheetName = workbook.SheetNames[0];
+        const secondSheetName = workbook.SheetNames[1];
+        const thirdSheetName = workbook.SheetNames[2];
+        const forthSheetName = workbook.SheetNames[3];
+        const fifthSheetName = workbook.SheetNames[4];
+        const sixthSheetName = workbook.SheetNames[5];
+        const seventhSheetName = workbook.SheetNames[6];
+        const firstSheet = workbook.Sheets[firstSheetName];
+        const secondSheet = workbook.Sheets[secondSheetName];
+        const thirdSheet = workbook.Sheets[thirdSheetName];
+        const forthSheet = workbook.Sheets[forthSheetName];
+        const fifthSheet = workbook.Sheets[fifthSheetName];
+        const sixthSheet = workbook.Sheets[sixthSheetName];
+        const seventhSheet = workbook.Sheets[seventhSheetName];
+
+        // Checking the cells in the sheet
+        const desiredCellsFirstSheet = ['A4', 'B4', 'A16', 'B16', 'A28', 'B28', 'A40'];
+        for (const cell of desiredCellsFirstSheet) {
+          const cellValue = firstSheet[cell]?.v;
+          if (!cellValue) {
+            alert(`The Cell ${cell} in the ${firstSheetName} sheet has no value.`);
+            this.isFileValid = false;
+            return;
+          }
+        }
+
+        const desiredCellsSecondSheet = ['A4', 'B4'];
+        for (const cell of desiredCellsSecondSheet) {
+          const cellValue = secondSheet[cell]?.v;
+          if (!cellValue) {
+            alert(`The Cell ${cell} in the ${secondSheetName} sheet has no value.`);
+            this.isFileValid = false;
+            return;
+          }
+        }
+
+        const desiredCellsThirdSheet = ['A4', 'B4', 'C4', 'A16', 'B16', 'A28'];
+        for (const cell of desiredCellsThirdSheet) {
+          const cellValue = thirdSheet[cell]?.v;
+          if (!cellValue) {
+            alert(`The Cell ${cell} in the ${firstSheetName} sheet has no value.`);
+            this.isFileValid = false;
+            return;
+          }
+        }
+
+        const desiredCellsForthSheet = ['A4', 'B4', 'A16', 'B16', 'A28', 'B28', 'A40'];
+        for (const cell of desiredCellsForthSheet) {
+          const cellValue = forthSheet[cell]?.v;
+          if (!cellValue) {
+            alert(`The Cell ${cell} in the ${forthSheetName} sheet has no value.`);
+            this.isFileValid = false;
+            return;
+          }
+        }
+
+        const desiredCellsFifthSheet = ['A4', 'B4', 'C4', 'A16', 'B16', 'A28'];
+        for (const cell of desiredCellsFifthSheet) {
+          const cellValue = fifthSheet[cell]?.v;
+          if (!cellValue) {
+            alert(`The Cell ${cell} in the ${fifthSheetName} sheet has no value.`);
+            this.isFileValid = false;
+            return;
+          }
+        }
+
+        const desiredCellsSixsthSheet = ['A4', 'B4', 'C4', 'A16', 'B16', 'A28'];
+        for (const cell of desiredCellsSixsthSheet) {
+          const cellValue = sixthSheet[cell]?.v;
+          if (!cellValue) {
+            alert(`The Cell ${cell} in the ${sixthSheetName} sheet has no value.`);
+            this.isFileValid = false;
+            return;
+          }
+        }
+
+        const desiredCellsSeventhSheet = ['A4', 'B4', 'A16', 'B16', 'A28', 'B28', 'A40'];
+        for (const cell of desiredCellsSeventhSheet) {
+          const cellValue = seventhSheet[cell]?.v;
+          if (!cellValue) {
+            alert(`The Cell ${cell} in the ${seventhSheetName} sheet has no value.`);
+            this.isFileValid = false;
+            return;
+          }
+        }
+      };
+
+      fileReader.readAsArrayBuffer(this.selectedFile);
+    }
   }
+  
 
   uploadFile() {
     if (this.selectedFile) {
@@ -144,9 +234,7 @@ export class DashboardComponent implements OnInit {
           if (res.status === 200) {
             alert('File uploaded successfully');
             this.selectedFile = null;
-            const fileInput = document.getElementById(
-              'fileInput'
-            ) as HTMLInputElement;
+            const fileInput = document.getElementById('fileInput') as HTMLInputElement;
             fileInput.value = '';
           }
         });

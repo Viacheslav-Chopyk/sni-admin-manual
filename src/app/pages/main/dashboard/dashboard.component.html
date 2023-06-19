@@ -13,11 +13,11 @@
         <p class="selected-table"> Selected type Network: {{selectedNetwork}}</p>
         <div *ngIf="selectedNetwork">
           <div *ngFor="let item of Object.keys(dataValue)">
-            <p>{{item}}:</p>
+            <p style="font-weight: bold;">{{item}}:</p>
             <form class="data-form"  [formGroup]="myForm[item]">
               <div class="data-item"*ngFor="let input of dataValue[item]">
-                <mat-label>{{input.name}}<span style="color: red; font-size: 20px" *ngIf="isInputRequired(input)">* </span>: </mat-label>
-                <input class="inputData" 
+                <mat-label>{{input.name}}<span class="required" *ngIf="isInputRequired(input)">* </span>: </mat-label>
+                <input class="inputData"
                       [formControlName]="input.name" matInput
                       [type]="input.type === 'bigint' || input.type === 'int' ? 'number' : 'text'" maxlength="256"
                       placeholder="">
@@ -50,7 +50,7 @@
     <div class="upload-block">
       <input type="file" id="fileInput" (change)="onFileSelected($event)"
              accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"/>
-      <button mat-raised-button color="primary" (click)="uploadFile()" [disabled]="!selectedFile">Upload</button>
+      <button mat-raised-button color="primary" (click)="uploadFile()" [disabled]="!selectedFile || !isFileValid">Upload</button>
     </div>
   </mat-tab>
 </mat-tab-group>

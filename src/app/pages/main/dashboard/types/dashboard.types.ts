@@ -3,11 +3,13 @@ export  interface ISocialNetwork {
   name: string;
 }
 
-export  interface IDataValue {
-  value: string;
-  name: string;
-  type: string;
-  required: boolean
+export interface INetwork {
+  network: NetworkTable[];
 }
 
-
+export interface NetworkTable {
+  name: string;
+  required: boolean;
+  type: string;
+  value: string;
+}
