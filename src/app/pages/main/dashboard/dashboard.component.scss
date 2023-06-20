@@ -11,9 +11,9 @@
  display: flex;
  flex-wrap: wrap;
 
- .data-item {
-  margin-right: 20px;
-  margin-bottom: 20px;
+  .data-item {
+    margin-right: 20px;
+    margin-bottom: 20px;
   }
 
   .required {
@@ -40,6 +40,16 @@
 
 .template-block {
   margin-bottom: 40px;
+  margin-top: 40px;
+
+  .selected-network {
+    margin-left: 20px;
+    margin-bottom: 40px;
+  }
+
+  ::ng-deep .mat-mdc-form-field {
+    margin-left: 20px;
+  }
 
   button {
     margin-left: 20px;
