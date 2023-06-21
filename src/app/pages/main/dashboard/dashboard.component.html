@@ -33,7 +33,9 @@
     </div>
   </mat-tab>
   <mat-tab label="Download or Upload file">
-    
+    <button mat-raised-button color="primary"
+              (click)="downloadFile('https://midapi.sni.ai/get_files/Template.xlsx')">Download TEMPLATE
+    </button>
     <div class="template-block">
       <mat-form-field appearance="fill">
         <mat-label>Social Network</mat-label>
@@ -43,10 +45,7 @@
           </mat-option>
         </mat-select>
       </mat-form-field>
-      <p class="selected-network"> Selected type Network: {{networkSelected}}</p>
-      <button mat-raised-button color="primary"
-              (click)="downloadFile('https://midapi.sni.ai/get_files/Template.xlsx')">Download TEMPLATE
-      </button>
+      <p class="selected-network"> Selected type Network: {{networkSelected}} </p>
       <!-- <button mat-raised-button color="primary"
               (click)="downloadFile('https://midapi.sni.ai/get_files/TABLEGROUPS.xlsx')">Download TABLE GROUPS
       </button>
@@ -58,7 +57,7 @@
       </button> -->
     </div>
     <div class="upload-block">
-      <input type="file" id="fileInput" (change)="onFileSelected($event)"
+      <input type="file" id="fileInput" (change)="onFileSelected($event)" [disabled]="!networkSelected"
              accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"/>
       <button mat-raised-button color="primary" (click)="uploadFile()" [disabled]="!selectedFile || !isFileValid">Upload</button>
     </div>

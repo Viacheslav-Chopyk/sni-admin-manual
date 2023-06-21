@@ -17,7 +17,6 @@ export class DashboardComponent implements OnInit {
   selectedFile: File | null = null;
   isFileValid = true;
   networkSelected: string = '';
-  data: any;
 
   socialNetwork: ISocialNetwork[] = [
     {value: 'Facebook', name: 'Facebook'},
@@ -51,10 +50,8 @@ export class DashboardComponent implements OnInit {
     this.createForm();
   }
 
-  changeNetwork(event:string){
-    console.log(event);
-    
-   }
+  changeNetwork(event:Event){
+  }
 
   getData() {
     this.dashboardService.getTableData().subscribe((res) => {
@@ -124,16 +121,15 @@ export class DashboardComponent implements OnInit {
 
   downloadFile(fileUrl: string) {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-    this.http.get(fileUrl, {responseType: 'blob',headers: headers,})
-      .subscribe((response) => {
-        const blob = new Blob([response], { type: 'application/octet-stream' });
-        const url = window.URL.createObjectURL(blob);
-        const link = document.createElement('a');
-        link.href = url;
-        link.download = this.getFileName(fileUrl);
-        link.click();
-        window.URL.revokeObjectURL(url);
-      });
+    this.http.get(fileUrl, {responseType: 'blob',headers: headers,}).subscribe((response) => {
+      const blob = new Blob([response], { type: 'application/octet-stream' });
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = this.getFileName(fileUrl);
+      link.click();
+      window.URL.revokeObjectURL(url);
+    });
   }
 
   getFileName(fileUrl: string): string {
@@ -253,7 +249,6 @@ export class DashboardComponent implements OnInit {
   
             for (const cell of desiredCells) {
               const cellValue = sheet[cell]?.v;
-              console.log(cellValue);
   
               if (!cellValue) {
                 alert(`The Cell ${cell} in the ${sheetName} sheet has no value.`);
@@ -273,7 +268,7 @@ export class DashboardComponent implements OnInit {
     }
   }
   
-  getDesiredCellsForSheet(sheetName: any) {
+  getDesiredCellsForSheet(sheetName: string) {
     const socialNetworkMappings: { [key: string]: string[] } = {
       Facebook: ['A4', 'B4', 'A16', 'B16', 'A28', 'B28', 'A40'],
       GoogleSearch: ['A4', 'B4'],
@@ -291,19 +286,14 @@ export class DashboardComponent implements OnInit {
     if (this.selectedFile) {
       const formData = new FormData();
       formData.append('upload_file', this.selectedFile, this.selectedFile.name);
-      this.http
-        .post('https://midapi.sni.ai/sending_files_repair', formData, {
-          observe: 'response',
-          responseType: 'text',
-        })
-        .subscribe((res: HttpResponse<any>) => {
-          if (res.status === 200) {
-            alert('File uploaded successfully');
-            this.selectedFile = null;
-            const fileInput = document.getElementById('fileInput') as HTMLInputElement;
-            fileInput.value = '';
-          }
-        });
+      this.http.post('https://midapi.sni.ai/sending_files_repair', formData, {observe: 'response',responseType: 'text',}).subscribe((res: HttpResponse<any>) => {
+        if (res.status === 200) {
+          alert('File uploaded successfully');
+          this.selectedFile = null;
+          const fileInput = document.getElementById('fileInput') as HTMLInputElement;
+          fileInput.value = '';
+        }
+      });
     }
   }
 
