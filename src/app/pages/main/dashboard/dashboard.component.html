@@ -15,9 +15,9 @@
           <div *ngFor="let item of Object.keys(dataValue)">
             <p style="font-weight: bold;">{{item}}:</p>
             <form class="data-form"  [formGroup]="myForm[item]">
-              <div class="data-item"*ngFor="let input of dataValue[item]">
-                <mat-label>{{input.name}}<span class="required" *ngIf="isInputRequired(input)">* </span>: </mat-label>
-                <input class="inputData"
+              <div class="data-item" *ngFor="let input of dataValue[item]"  [ngStyle]="{ 'display': input.value === 'no' ? 'none' : 'block' }">
+                <mat-label *ngIf="input.value === 'yes'">{{input.name}}<span class="required" *ngIf="isInputRequired(input)">* </span>: </mat-label>
+                <input *ngIf="input.value === 'yes'"  class="inputData"
                       [formControlName]="input.name" matInput
                       [type]="input.type === 'bigint' || input.type === 'int' ? 'number' : 'text'" maxlength="256"
                       placeholder="">

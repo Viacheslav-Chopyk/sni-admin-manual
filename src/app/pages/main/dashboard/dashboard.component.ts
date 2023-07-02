@@ -65,11 +65,11 @@ export class DashboardComponent implements OnInit {
     Object.keys(this.dataValue).forEach((el) => {
       this.myForm[el] = this.fb.group({});
       this.dataValue[el].forEach((item: any) => {
-        const validators = item.required ? [Validators.required] : [];
-        this.myForm[el].addControl(
-          item.name,
-          new FormControl(item.value, validators)
-        );
+          const validators = item.required ? [Validators.required] : [];
+          this.myForm[el].addControl(
+            item.name,
+            new FormControl('', validators)
+          );
       });
     });
   }
@@ -241,19 +241,19 @@ export class DashboardComponent implements OnInit {
         const data = new Uint8Array(e.target.result);
         const workbook = XLSX.read(data, { type: 'array' });
         const sheetNames = workbook.SheetNames;
-  
+
         for (const sheetName of sheetNames) {
           if (this.networkSelected.includes(sheetName)) {
             const sheet = workbook.Sheets[sheetName];
             const desiredCells = this.getDesiredCellsForSheet(sheetName);
-  
+
             for (const cell of desiredCells) {
               const cellValue = sheet[cell]?.v;
-  
+
               if (!cellValue) {
                 alert(`The Cell ${cell} in the ${sheetName} sheet has no value.`);
-                this.isFileValid = false;
                 this.selectedFile = null;
+                // this.isFileValid = false;
                 const fileInput = document.getElementById('fileInput') as HTMLInputElement;
                 fileInput.value = '';
                 this.networkSelected = '';
@@ -263,11 +263,11 @@ export class DashboardComponent implements OnInit {
           }
         }
       };
-  
+
       fileReader.readAsArrayBuffer(this.selectedFile);
     }
   }
-  
+
   getDesiredCellsForSheet(sheetName: string) {
     const socialNetworkMappings: { [key: string]: string[] } = {
       Facebook: ['A4', 'B4', 'A16', 'B16', 'A28', 'B28', 'A40'],
@@ -278,7 +278,7 @@ export class DashboardComponent implements OnInit {
       TikTok: ['A4', 'B4', 'C4', 'A16', 'B16', 'A28'],
       YouTube: ['A4', 'B4', 'A16', 'B16', 'A28', 'B28', 'A40']
     };
-  
+
     return socialNetworkMappings[sheetName] || [];
   }
 
@@ -292,6 +292,7 @@ export class DashboardComponent implements OnInit {
           this.selectedFile = null;
           const fileInput = document.getElementById('fileInput') as HTMLInputElement;
           fileInput.value = '';
+          this.networkSelected = '';
         }
       });
     }
